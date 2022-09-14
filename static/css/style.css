@@ -1,0 +1,91 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Jost', sans-serif;
+}
+
+a, a:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+.flexed {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    margin-bottom: 48px;
+    padding: 12px;
+}
+
+.sticky-top {
+    border-bottom: 4px solid #123c69;
+}
+
+.top {
+    width: 1200px;
+    margin: auto;
+    justify-content: space-between;
+}
+
+.top h2, .edit-button {
+    margin: 6px 12px;
+}
+
+.edit-button {
+    background-color: #123c69;
+    border: #123c69;
+}
+
+.edit-button:hover {
+    background-color: #144477;
+}
+
+.task-items {
+    margin-top: 12px;
+    padding: 12px;
+    background-color: #fafafa;
+    border-radius: 4px;
+}
+
+.update-button {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    color: white;
+    background-color: #123c69;
+    border-color: #123c69;
+    transition: 0.7s;
+}
+
+.del-button {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    color: white;
+    background-color: #DC3545;
+    border-color: #DC3545;
+    transition: 0.7s;
+}
+
+.update-button:hover {
+    background-color: white;
+    color: #123c69;
+    border-color: #123c69;
+    transform: scale(0.98);
+}
+
+.del-button:hover {
+    background-color: white;
+    color: #123c69;
+    border-color: #123c69;
+    transform: scale(0.98);
+}
