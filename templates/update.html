@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Update
+{% endblock title %}
+
+{% block body %}
+
+<nav class="navbar sticky-top navbar-light bg-light">
+    <div class="top flexed">
+        <h2 style="color: #123c69;"><a href="/">To-Do List</a></h2>
+    </div>
+</nav>
+
+<div class="container">
+
+    <h2 style="color: #123c69;">Update Task</h2>
+    <form action="/update/{{todo[0]}}" method="POST">
+        <div class="mb-3">
+        <label for="task" class="form-label">Update Task</label>
+        <input type="text" class="form-control" name="task" id="task" value="{{ todo[1] }}" aria-describedby="emailHelp" required>
+        </div>
+        <div class="mb-3">
+        <label for="dsc" class="form-label">Update Description</label>
+        <input type="text" class="form-control" name="dsc" value="{{ todo[2] }}" id="dsc">
+        </div>
+        <button type="submit" class="btn btn-outline-primary update-button">Update</button>
+        <a type="button" class="btn btn-outline-secondary del-button" href="/">Close</a>
+    </form>
+</div>
+
+{% endblock body %}

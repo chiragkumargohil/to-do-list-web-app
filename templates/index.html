@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    To-Do List
+{% endblock title %}
+
+{% block body %}
+
+    <nav class="navbar sticky-top navbar-light bg-light">
+        <div class="top flexed">
+            <h2 style="color: #123c69;"><a href="/">To-Do List</a></h2>
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary edit-button" data-toggle="modal" data-target="#exampleModalCenter">
+                Add Task
+            </button>
+        </div>
+    </nav>
+
+    <!-- Modal -->
+    <form action="/" method="POST">
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Add Task</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="task">Task</label>
+                        <input type="text" class="form-control" id="task" name="task" aria-describedby="emailHelp" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dsc">Description</label>
+                        <input type="text" class="form-control" name="dsc" id="dsc">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary edit-button">Add</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    </form>
+
+    <div class="container">
+        <main class="content">
+            {% if allToDo|length == 0 %}
+            <div class="alert alert-secondary" role="alert">
+                Add Your First To-Do
+            </div>
+            {% else %}
+            {% for todo in allToDo %}
+            <div class="task-items">
+                <div class="item">
+                    <div class="task">
+                        <h5>{{ todo[1] }}</h5>
+                        <p style="font-style: italic; margin-bottom: 0;">@ {{ todo[3] }}</p>
+                    </div>
+                    <div class="dsc">
+                        <p style="margin-bottom: 0.8rem">{{ todo[2] }}</p>
+                    </div>
+                    <div class="task-buttons">
+                        <a class="btn btn-outline-primary update-button" href="/update/{{todo[0]}}" role="button">Update</a>
+                        
+                        <a class="btn btn-outline-primary del-button" href="/delete/{{todo[0]}}" role="button">Delete</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </main>
+    </div>
+    <nav class="navbar fixed-bottom navbar-light bg-light">
+        <a class="navbar-brand" style="font-style:italic;"><q>Be the change you wish to see!</q></a>
+    </nav>
+
+{% endblock body %}
