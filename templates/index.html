@@ -60,16 +60,16 @@
             <div class="task-items">
                 <div class="item">
                     <div class="task">
-                        <h5>{{ todo[1] }}</h5>
-                        <p style="font-style: italic; margin-bottom: 0;">@ {{ todo[3] }}</p>
+                        <h5>{{ todo.task }}</h5>
+                        <p style="font-style: italic; margin-bottom: 0;">@ {{ todo.dated }}</p>
                     </div>
                     <div class="dsc">
-                        <p style="margin-bottom: 0.8rem">{{ todo[2] }}</p>
+                        <p style="margin-bottom: 0.8rem">{{ todo.dsc }}</p>
                     </div>
                     <div class="task-buttons">
-                        <a class="btn btn-outline-primary update-button" href="/update/{{todo[0]}}" role="button">Update</a>
+                        <a class="btn btn-outline-primary update-button" href="/update/{{todo.srno}}" role="button">Update</a>
                         
-                        <a class="btn btn-outline-primary del-button" href="/delete/{{todo[0]}}" role="button">Delete</a>
+                        <a class="btn btn-outline-primary del-button" href="/delete/{{todo.srno}}" role="button">Delete</a>
                     </div>
                 </div>
             </div>
