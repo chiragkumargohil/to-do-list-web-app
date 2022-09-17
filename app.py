@@ -1,83 +1,65 @@
 from flask import Flask, render_template, redirect, request
 from datetime import datetime
-import sqlite3
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.db"
+app.config['SQLALCHEMY_DATABASE_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
-DB_PATH = 'database.db'
+class ToDo(db.Model):
+    srno = db.Column(db.Integer, primary_key=True)
+    task = db.Column(db.String(200), nullable=False)
+    dsc = db.Column(db.String(500))
+    dated = db.Column(db.String(200), nullable=False)
 
-def create_database():    
-    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
-    cur = conn.cursor()
-    
-    cur.execute("""CREATE TABLE IF NOT EXISTS "todo" (
-                "srno"	INTEGER NOT NULL UNIQUE,
-                "task"	TEXT NOT NULL,
-                "dsc"	TEXT,
-                "dated"	TEXT NOT NULL,
-                PRIMARY KEY("srno" AUTOINCREMENT)
-            );""")
-    
-    conn.commit()
-    conn.close()
+    def __repr__(self) -> str:
+        return f"({self.srno}, {self.task}, {self.dsc}, {self.dated})"
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
-    cur = conn.cursor()
-
     if request.method == "POST":
         user_task = request.form["task"]
         user_dsc = request.form["dsc"]
         now = datetime.now()
         dated = now.strftime("%d/%m/%Y %H:%M:%S")
+        todo = ToDo(task=user_task, dsc=user_dsc, dated=dated)
         
-        cur.execute('''INSERT INTO todo (task, dsc, dated) VALUES (?, ?, ?);''', (user_task, user_dsc, dated))
-        conn.commit()
+        db.session.add(todo)
+        db.session.commit()
     
-    cur.execute("SELECT * FROM todo")
-    allToDo = cur.fetchall()
-    conn.close()
-
+    allToDo = ToDo.query.all()
     return render_template('index.html', allToDo=allToDo)
 
-@app.route("/update/<int:number>", methods=['GET', 'POST'])
-def update(number):
-    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
-    cur = conn.cursor()
-
+@app.route("/update/<int:srno>", methods=['GET', 'POST'])
+def update(srno):
     if request.method == "POST":
-        user_srno = number
         user_task = request.form["task"]
         user_dsc = request.form["dsc"]
         now = datetime.now()
         dated = now.strftime("%d/%m/%Y %H:%M:%S")
         
-        cur.execute('''UPDATE todo SET task= ?, dsc= ?, dated= ? WHERE srno= ?;''', (user_task, user_dsc, dated, user_srno))
-        conn.commit()
-        conn.close()
+        todo = ToDo.query.filter_by(srno=srno).first()
+        todo.task = user_task
+        todo.dsc = user_dsc
+        todo.dated = dated
 
+        db.session.add(todo)
+        db.session.commit()
         return redirect('/')
     
-    cur.execute('''SELECT * FROM todo WHERE srno= ?;''', (number,))
-    todo = cur.fetchone()
-    conn.close()
-
+    todo = ToDo.query.filter_by(srno=srno).first()
     return render_template('update.html', todo=todo)
 
-@app.route('/delete/<int:number>')
-def delete(number):
-    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
-    cur = conn.cursor()
-
-    cur.execute("DELETE FROM todo WHERE srno = ?", (number,))
-
-    conn.commit()
-    conn.close()
+@app.route('/delete/<int:srno>')
+def delete(srno):
+    delToDo = ToDo.query.filter_by(srno=srno).first()
+    
+    db.session.delete(delToDo)
+    db.session.commit()
 
     return redirect("/")
 
 
 if __name__ == '__main__':
-    create_database()
-    app.run()
+    app.run(debug=True)
